@@ -1,0 +1,55 @@
+<linkset>
+	<html:link rel="localization" href="__addonRef__-preferences.ftl" />
+	<html:link rel="stylesheet" href="chrome://__addonRef__/content/preferences.css" />
+</linkset>
+<vbox id="zotero-prefpane-__addonRef__" onload="Zotero.__addonInstance__.prefsMenu.onPrefsLoad(window)"
+	class="main-section">
+	<!-- Custom fields -->
+	<groupbox>
+		<label>
+			<html:h2 data-l10n-id="pref-custom-fields-title"></html:h2>
+		</label>
+		<html:table>
+			<html:thead>
+				<html:tr>
+					<html:th data-l10n-id="pref-custom-fields-header-name"></html:th>
+					<html:th data-l10n-id="pref-custom-fields-header-position"></html:th>
+					<html:th data-l10n-id="pref-custom-fields-header-delete"></html:th>
+				</html:tr>
+			</html:thead>
+			<html:tbody id="custom-fields-table-body">
+				<html:tr id="custom-fields-table-hidden-row" hidden="true">
+					<html:td>
+						<html:input type="text" />
+					</html:td>
+					<html:td>
+						<menulist native="true">
+							<menupopup>
+								<menuitem data-l10n-id="prefs-custom-field-position-start" value="start" />
+								<menuitem data-l10n-id="prefs-custom-field-position-end" value="end" />
+								<menuitem data-l10n-id="prefs-custom-field-position-after-creators" value="afterCreators" />
+							</menupopup>
+						</menulist>
+					</html:td>
+					<html:td>
+						<html:button>🗑</html:button>
+					</html:td>
+				</html:tr>
+			</html:tbody>
+			<html:button id="custom-fields-save-add"
+				onclick="Zotero.__addonInstance__.prefsMenu.addTableRowCustomFields(window)"
+				data-l10n-id="pref-custom-fields-button-add" />
+			<br />
+			<html:button id="custom-fields-save-button"
+				onclick="Zotero.__addonInstance__.prefsMenu.saveTableCustomFields(window)"
+				data-l10n-id="pref-custom-fields-button-save" />
+			<html:button id="custom-fields-reset-button"
+				onclick="Zotero.__addonInstance__.prefsMenu.resetTableCustomFields(window)"
+				data-l10n-id="pref-custom-fields-button-reset" />
+		</html:table>
+	</groupbox>
+</vbox>
+<vbox class="main-section">
+	<html:label data-l10n-id="pref-help"
+		data-l10n-args='{"time": "__buildTime__","name": "__addonName__","version":"__buildVersion__"}'></html:label>
+</vbox>

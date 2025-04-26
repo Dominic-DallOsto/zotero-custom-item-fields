@@ -1,0 +1,75 @@
+{
+	"name": "zotero-custom-item-fields",
+	"version": "0.0.1",
+	"description": "Add custom item fields to Zotero",
+	"config": {
+		"addonName": "Zotero Custom Item Fields",
+		"addonID": "custom-item-fields@hotmail.com",
+		"addonRef": "zotero-custom-item-fields",
+		"addonInstance": "ZoteroCustomItemFields",
+		"prefsPrefix": "extensions.zotero.zotero-custom-item-fields",
+		"releasePage": "https://github.com/Dominic-DallOsto/zotero-custom-item-fields/releases",
+		"updateJSON": "https://github.com/Dominic-DallOsto/zotero-custom-item-fields/releases/latest/download/update.json"
+	},
+	"main": "src/index.ts",
+	"scripts": {
+		"start": "zotero-plugin serve",
+		"build": "tsc --noEmit && zotero-plugin build",
+		"stop": "node scripts/stop.mjs",
+		"lint": "prettier --write . && eslint . --fix",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"release": "release-it --only-version --preReleaseId=beta",
+		"update-deps": "npm update --save"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Dominic-DallOsto/zotero-custom-item-fields.git"
+	},
+	"author": "Dominic Dall'Osto",
+	"license": "AGPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/Dominic-DallOsto/zotero-custom-item-fields/issues"
+	},
+	"homepage": "https://github.com/Dominic-DallOsto/zotero-custom-item-fields",
+	"dependencies": {
+		"zotero-plugin-toolkit": "^4.1.2"
+	},
+	"devDependencies": {
+		"@types/node": "^22.14.1",
+		"@eslint/js": "^9.25.1",
+		"esbuild": "^0.25.2",
+		"eslint": "^9.25.1",
+		"eslint-config-prettier": "^10.1.2",
+		"prettier": "^3.5.3",
+		"release-it": "^19.0.1",
+		"replace-in-file": "^8.3.0",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.31.0",
+		"zotero-plugin-scaffold": "^0.5.0",
+		"zotero-types": "^3.1.9"
+	},
+	"prettier": {
+		"printWidth": 80,
+		"useTabs": true,
+		"tabWidth": 4,
+		"endOfLine": "lf"
+	},
+	"release-it": {
+		"git": {
+			"tagName": "v${version}"
+		},
+		"npm": {
+			"publish": false
+		},
+		"github": {
+			"release": false,
+			"assets": [
+				"build/*.xpi"
+			]
+		},
+		"hooks": {
+			"before:init": "npm run lint",
+			"after:bump": "npm run build"
+		}
+	}
+}

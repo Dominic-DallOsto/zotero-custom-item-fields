@@ -1,0 +1,15 @@
+/* Normally need to restart Zotero for these to take effect */
+
+/* Add, save, reset buttons */
+table > button {
+	margin: 5px;
+}
+
+table th {
+	text-align: left;
+	margin-left: 6px;
+}
+
+input:invalid {
+	color: rgb(255, 20, 20);
+}
