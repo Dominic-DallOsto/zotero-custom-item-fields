@@ -16,8 +16,7 @@ function onPrefsLoad(window: Window) {
 	setTableCustomFields(window);
 }
 
-function resetPrefsMenu(window: Window) {
-}
+function resetPrefsMenu(window: Window) {}
 
 function setTableCustomFields(window: Window) {
 	const tableBodyStatusNames = window.document.getElementById(
@@ -57,7 +56,9 @@ function getTableCustomFieldRows(window: Window) {
 	for (const row of tableRows ?? []) {
 		if (!(row as HTMLTableRowElement).hidden) {
 			names.push((row.children[0].firstChild as HTMLInputElement).value);
-			positions.push((row.children[1].firstChild as HTMLInputElement).value);
+			positions.push(
+				(row.children[1].firstChild as HTMLInputElement).value,
+			);
 		}
 	}
 	return { names, positions };
@@ -137,7 +138,7 @@ function tableContainsInvalidInput(window: Window) {
 }
 
 function saveTableCustomFields(window: Window) {
-	const {names, positions} = getTableCustomFieldRows(window);
+	const { names, positions } = getTableCustomFieldRows(window);
 	if (new Set(names).size != names.length) {
 		Services.prompt.alert(
 			window as mozIDOMWindowProxy,
@@ -154,7 +155,10 @@ function saveTableCustomFields(window: Window) {
 		return;
 	}
 	const customFieldData: CustomFieldData[] = names.map((name, index) => {
-		return { name: name, position: positions[index] as CustomFieldPosition };
+		return {
+			name: name,
+			position: positions[index] as CustomFieldPosition,
+		};
 	});
 	setPref(CUSTOM_FIELD_DATA_PREF, listToPrefString(customFieldData));
 	// if we change the statuses, need to reset the status lists here
@@ -165,12 +169,16 @@ function createTableRowsCustomFields(window: Window) {
 	const customFieldData = prefStringToList(
 		getPref(CUSTOM_FIELD_DATA_PREF) as string,
 	);
-	return customFieldData.map(({name, position}) =>
+	return customFieldData.map(({ name, position }) =>
 		createTableRowStatusNames(window, name, position),
 	);
 }
 
-function createTableRowStatusNames(window: Window, fieldName: string, position: CustomFieldPosition | "") {
+function createTableRowStatusNames(
+	window: Window,
+	fieldName: string,
+	position: CustomFieldPosition | "",
+) {
 	const row = window.document
 		.getElementById(CUSTOM_FIELDS_TABLE_HIDDEN_ROW)
 		?.cloneNode(true) as HTMLTableRowElement;
@@ -178,7 +186,8 @@ function createTableRowStatusNames(window: Window, fieldName: string, position: 
 	row.hidden = false;
 
 	const fromMenuList = row?.childNodes[0]?.firstChild as HTMLInputElement;
-	const positionMenuList = row?.childNodes[1]?.firstChild as XULMenuListElement;
+	const positionMenuList = row?.childNodes[1]
+		?.firstChild as XULMenuListElement;
 	const deleteButton = row?.childNodes[2]?.firstChild as HTMLButtonElement;
 
 	fromMenuList.value = fieldName;
@@ -190,7 +199,7 @@ function createTableRowStatusNames(window: Window, fieldName: string, position: 
 					"end",
 					"afterCreators",
 				].indexOf(position))
-			: 0; 
+			: 0;
 
 	if (row && deleteButton) {
 		deleteButton.onclick = () => {

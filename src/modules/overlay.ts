@@ -10,7 +10,7 @@ import {
 	setItemExtraProperty,
 } from "../utils/extraField";
 
-export const CUSTOM_FIELD_DATA_PREF = "custom-field-data"
+export const CUSTOM_FIELD_DATA_PREF = "custom-field-data";
 export const FORBIDDEN_PREF_STRING_CHARACTERS = new Set(":;|");
 
 export type CustomFieldPosition = "start" | "afterCreators" | "end";
@@ -19,38 +19,42 @@ export type CustomFieldData = {
 	position: CustomFieldPosition;
 };
 
-
 function getItemCustomField(item: Zotero.Item, fieldName: string) {
 	const statusField = getItemExtraProperty(item, fieldName);
 	return statusField.length == 1 ? statusField[0] : "";
 }
 
-function setItemCustomField(item: Zotero.Item, fieldName: string, fieldValue: string) {
+function setItemCustomField(
+	item: Zotero.Item,
+	fieldName: string,
+	fieldValue: string,
+) {
 	setItemExtraProperty(item, fieldName, fieldValue);
 	void item.saveTx();
 }
 
 // pref string looks like "name1;position1|name2;position2|...""
 export function prefStringToList(prefString: string): CustomFieldData[] {
-	if (prefString == ""){
+	if (prefString == "") {
 		return [];
 	}
-	return prefString
-		.split("|")
-		.map((nameAndPosition) => {
-			return {
-				name: nameAndPosition.split(";")[0],
-				position: nameAndPosition.split(";")[1] as CustomFieldPosition,
-			};
+	return prefString.split("|").map((nameAndPosition) => {
+		return {
+			name: nameAndPosition.split(";")[0],
+			position: nameAndPosition.split(";")[1] as CustomFieldPosition,
+		};
 	});
 }
 
 export function listToPrefString(nameAndPositionList: CustomFieldData[]) {
 	return nameAndPositionList
-		.map((nameAndPosition) => `${nameAndPosition.name};${nameAndPosition.position}`)
+		.map(
+			(nameAndPosition) =>
+				`${nameAndPosition.name};${nameAndPosition.position}`,
+		)
 		.join("|");
 }
-// 
+//
 export default class ZoteroCustomItemFields {
 	customFieldData: CustomFieldData[];
 	preferenceUpdateObservers?: symbol[];
@@ -71,7 +75,6 @@ export default class ZoteroCustomItemFields {
 		// see https://groups.google.com/g/zotero-dev/c/wirqnj_EQUQ/m/ud3k0SpMAAAJ
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
 		window.MozXULElement.insertFTLIfNeeded(`${config.addonRef}-addon.ftl`);
-
 	}
 
 	public unload() {
