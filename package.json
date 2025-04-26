@@ -1,6 +1,6 @@
 {
 	"name": "zotero-custom-item-fields",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "Add custom item fields to Zotero",
 	"config": {
 		"addonName": "Zotero Custom Item Fields",
