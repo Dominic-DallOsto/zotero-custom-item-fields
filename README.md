@@ -3,6 +3,7 @@
 ![downloads](<https://img.shields.io/github/downloads/dominic-dallosto/zotero-custom-item-fields/latest?style=flat-square&label=Downloads%20(latest%20version)>)
 
 An extension for Zotero that allows you to add custom fields to each item, for extra data you would like to keep track of.
+It is also possible to view this data as new oclumns in the Zotero item pane.
 
 ## Installation
 

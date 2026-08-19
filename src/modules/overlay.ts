@@ -59,6 +59,7 @@ export default class ZoteroCustomItemFields {
 	customFieldData: CustomFieldData[];
 	preferenceUpdateObservers?: symbol[];
 	rowIDs?: string[];
+	customColumnIDs?: (string | false)[];
 
 	constructor() {
 		this.initialiseDefaultPreferences();
@@ -70,6 +71,7 @@ export default class ZoteroCustomItemFields {
 		this.addPreferencesMenu();
 		this.addPreferenceUpdateObservers();
 		this.addCustomItemFields();
+		this.addCustomColumns();
 
 		// resgister the locale file so it'll correctly apply to custom item rows
 		// see https://groups.google.com/g/zotero-dev/c/wirqnj_EQUQ/m/ud3k0SpMAAAJ
@@ -81,6 +83,14 @@ export default class ZoteroCustomItemFields {
 		this.removePreferenceMenu();
 		this.removePreferenceUpdateObservers();
 		this.removeCustomItemFields();
+		this.removeCustomColumns();
+	}
+
+	public reload() {
+		this.removeCustomItemFields();
+		this.addCustomItemFields();
+		this.removeCustomColumns();
+		this.addCustomColumns();
 	}
 
 	addCustomItemFields() {
@@ -95,6 +105,7 @@ export default class ZoteroCustomItemFields {
 				Zotero.ItemPaneManager.unregisterInfoRow(rowID),
 			);
 		}
+		this.rowIDs = undefined;
 	}
 
 	registerInfoRow(infoRowName: string, position: CustomFieldPosition) {
@@ -120,6 +131,37 @@ export default class ZoteroCustomItemFields {
 		}) as string;
 	}
 
+	addCustomColumns() {
+		this.customColumnIDs = this.customFieldData.map((customField) =>
+			this.registerCustomColumn(customField.name),
+		);
+	}
+
+	removeCustomColumns() {
+		if (this.customColumnIDs) {
+			this.customColumnIDs.forEach((columnID) => {
+				if (typeof columnID == "string") {
+					Zotero.ItemTreeManager.unregisterColumn(columnID);
+				}
+			});
+		}
+		this.customColumnIDs = undefined;
+	}
+
+	registerCustomColumn(columnName: string) {
+		return Zotero.ItemTreeManager.registerColumn({
+			dataKey: columnName,
+			pluginID: config.addonID,
+			label: columnName,
+			dataProvider(item, dataKey) {
+				return item.isRegularItem()
+					? getItemCustomField(item, columnName)
+					: "";
+			},
+			zoteroPersist: ["width", "hidden", "sortDirection"],
+		});
+	}
+
 	initialiseDefaultPreferences() {
 		initialiseDefaultPref(CUSTOM_FIELD_DATA_PREF, "");
 	}
@@ -130,8 +172,7 @@ export default class ZoteroCustomItemFields {
 				getPrefGlobalName(CUSTOM_FIELD_DATA_PREF),
 				(value: string) => {
 					this.customFieldData = prefStringToList(value);
-					this.removeCustomItemFields();
-					this.addCustomItemFields();
+					this.reload();
 				},
 				true,
 			),
